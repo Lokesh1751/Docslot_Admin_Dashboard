@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase.config";
-
+import { Link } from "react-router-dom";
 function Specialists() {
   const params = useParams();
   const [specialists, setSpecialists] = useState([]);
-  console.log(params.name);
 
   useEffect(() => {
     const getSpecialists = async () => {
@@ -24,32 +23,47 @@ function Specialists() {
         }));
 
         // Set state with fetched documents
-        setSpecialists(docs);
-
-        // Log documents to console
-        console.log(docs);
+        setSpecialists(
+          docs.filter(
+            (item) => item.category.toLowerCase() === params.name.toLowerCase()
+          )
+        );
       } catch (error) {
         console.error("Error fetching specialists: ", error);
       }
     };
 
     getSpecialists();
-  }, [params]);
-  console.log(specialists);
+  }, [params.name]);
 
   return (
-    <div>
-      <h1>Specialists</h1>
-      {specialists.length > 0 ? (
-        specialists.map((spec) => (
-          <div key={spec.id}>
-            <h2>{spec.name}</h2>
-            {/* Render other fields of the specialist here */}
-          </div>
-        ))
-      ) : (
-        <p>No specialists found.</p>
-      )}
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">{params.name} Specialists</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {specialists.length > 0 ? (
+          specialists.map((spec) => (
+            <Link to={`/docinfo/${spec.id}`}>
+              <div
+                key={spec.id}
+                className="bg-white cursor-pointer rounded-lg shadow-lg overflow-hidden"
+              >
+                <img
+                  src={spec.image}
+                  alt={spec.name}
+                  className="w-full h-48 object-contain"
+                />
+                <div className="p-4">
+                  <h2 className="text-2xl font-semibold mb-2 text-center">
+                    {spec.name}
+                  </h2>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>No specialists found.</p>
+        )}
+      </div>
     </div>
   );
 }

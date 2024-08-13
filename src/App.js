@@ -7,7 +7,9 @@ import Categories from "./pages/Categories";
 import AdminProfile from "./pages/AdminProfile";
 import AllAppointments from "./pages/AllAppointments";
 import Specialists from "./components/Specialists";
-
+import DoctorInfo from "./components/DoctorInfo";
+import EditDoctor from "./components/EditDoctor";
+import AllDoctors from "./pages/AllDoctors";
 function App() {
   return (
     <BrowserRouter>
@@ -22,8 +24,10 @@ function App() {
             <Route path="/cat" element={<Categories />} />
             <Route path="/profile" element={<AdminProfile />} />
             <Route path="/allapp" element={<AllAppointments />} />
-            <Route path="/cat/:name" element={<Specialists/>}/>
-
+            <Route path="/cat/:name" element={<Specialists />} />
+            <Route path="/docinfo/:id" element={<DoctorInfo />} />
+            <Route path="/edit-doctor/:id" element={<EditDoctor />} />
+            <Route path="/alldoc" element={<AllDoctors />} />
           </Routes>
         </main>
       </div>

@@ -20,7 +20,6 @@ const categories = [
   { id: 7, name: "Orthopedics", icon: <FaBone color="#FFC107" /> },
   { id: 8, name: "Ophthalmology", icon: <FaEye color="#3F51B5" /> },
   { id: 9, name: "Psychiatry", icon: <FaBrain color="#FF5722" /> },
-  { id: 10, name: "Urology", icon: <FaUserMd color="#9C27B0" /> },
 ];
 
 const Categories = () => {

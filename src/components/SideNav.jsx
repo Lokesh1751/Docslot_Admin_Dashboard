@@ -5,15 +5,18 @@ import {
   MdCategory,
   MdAdminPanelSettings,
   MdCalendarToday,
+  MdPeople, // Import an icon for "All Doctors"
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+
 function SideNav() {
   const location = useLocation();
   const currloc = location.pathname;
   console.log(currloc);
+
   return (
-    <div className="bg-[#0046C0] flex flex-col h-auto w-[270px]">
+    <div className="bg-[#0046C0] flex flex-col h-[100vh] w-[270px]">
       {/* Logo Section */}
       <div className="flex gap-2 p-6 items-center">
         <div className="bg-white p-4 rounded-full">
@@ -56,6 +59,12 @@ function SideNav() {
           label="All Appointments"
           ispath={currloc === "/allapp"}
         />
+        <NavItem
+          to="/alldoc" // Add route for "All Doctors"
+          icon={<MdPeople />} // Use an appropriate icon for doctors
+          label="All Doctors"
+          ispath={currloc === "/alldoc"}
+        />
       </div>
     </div>
   );
@@ -65,14 +74,26 @@ function SideNav() {
 const NavItem = ({ to, icon, label, ispath }) => (
   <Link to={to}>
     <div
-      className={`flex items-center gap-4 p-6 text-white hover:bg-blue-700 cursor-pointer rounded-md ${
+      className={`flex items-center gap-4 p-6  m-2 cursor-pointer rounded-md ${
         ispath
-          ? "bg-white text-blue-700 m-2 font-bold hover:bg-white hover:text-blue-800"
-          : ""
+          ? "bg-white text-blue-700 font-bold"
+          : "text-white hover:bg-blue-700"
       }`}
     >
-      <div className="flex-shrink-0 text-2xl">{icon}</div>
-      <h1 className="text-xl font-medium">{label}</h1>
+      <div
+        className={`flex-shrink-0 text-2xl ${
+          ispath ? "text-blue-700" : "text-white"
+        }`}
+      >
+        {icon}
+      </div>
+      <h1
+        className={`text-xl font-medium ${
+          ispath ? "text-blue-700" : "text-white"
+        }`}
+      >
+        {label}
+      </h1>
     </div>
   </Link>
 );
