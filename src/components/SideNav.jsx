@@ -30,10 +30,10 @@ function SideNav() {
       </div>
       <div className="flex flex-col flex-grow mt-4">
         <NavItem
-          to="/"
+          to="/dashboard"
           icon={<MdHome />}
           label="Dashboard"
-          ispath={currloc === "/"}
+          ispath={currloc === "/dashboard"}
         />
         <NavItem
           to="/adddoc"

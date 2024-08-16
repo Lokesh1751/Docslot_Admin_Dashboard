@@ -53,45 +53,45 @@ function AllDoctors() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold mb-6">All Doctors</h1>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-bold text-gray-900">All Doctors</h1>
         <input
           type="text"
           placeholder="Search Doctor..."
-          className="p-4 border border-black rounded-lg"
+          className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <div
-        className="grid grid-rows-1 md:grid-rows-2 lg:grid-rows-3 gap-6 cursor-pointer"
-        style={{ maxHeight: "100vh", overflowY: "auto" }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto"
+        style={{ maxHeight: "calc(100vh - 150px)" }} // Adjust maxHeight based on header/footer
       >
         {filteredDoctors.map((doctor) => (
           <Link
             key={doctor.id}
-            className="bg-white p-6 rounded-lg shadow-md flex justify-between items-center"
+            className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center"
             to={`/docinfo/${doctor.id}`}
           >
             <img
               src={doctor.image}
               alt={doctor.name}
-              className="w-[200px] h-[200px] rounded-full mb-4"
+              className="w-32 h-32 rounded-full mb-4 object-cover"
             />
-            <h2 className="text-2xl font-bold mb-2">{doctor.name}</h2>
-            <p className="text-blue-800 text-lg font-bold mb-2">
+            <h2 className="text-xl font-semibold mb-2">{doctor.name}</h2>
+            <p className="text-blue-800 text-md font-medium mb-4">
               Specialty: {doctor.specialty}
             </p>
             <div className="flex gap-4">
               <button
                 onClick={() => handleEdit(doctor.id)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(doctor.id)}
-                className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700"
+                className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 Delete
               </button>

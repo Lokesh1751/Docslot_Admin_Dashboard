@@ -9,17 +9,21 @@ import AllAppointments from "./pages/AllAppointments";
 import Specialists from "./components/Specialists";
 import DoctorInfo from "./components/DoctorInfo";
 import EditDoctor from "./components/EditDoctor";
+import Login from "./pages/Login";
 import AllDoctors from "./pages/AllDoctors";
+
 function App() {
+  const currentPath = window.location.pathname;
+
   return (
     <BrowserRouter>
-      {" "}
-      {/* BrowserRouter wraps all routing components */}
       <div className="flex justify-between">
-        <SideNav />
+        {/* Check if the path does not match the routes where you want to hide SideNav */}
+        {currentPath !== "/" && <SideNav />}
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/adddoc" element={<AddDoctor />} />
             <Route path="/cat" element={<Categories />} />
             <Route path="/profile" element={<AdminProfile />} />

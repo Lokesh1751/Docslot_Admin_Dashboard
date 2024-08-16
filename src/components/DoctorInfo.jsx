@@ -35,7 +35,7 @@ function DoctorInfo() {
       try {
         const docRef = doc(FIRESTORE_DB, "doctors", id);
         await deleteDoc(docRef);
-        navigate('/'); // Redirect to home or another page after deletion
+        navigate("/"); // Redirect to home or another page after deletion
       } catch (error) {
         console.error("Error deleting doctor: ", error);
       }
@@ -44,24 +44,42 @@ function DoctorInfo() {
 
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
 
-  if (!doctor) return <p className="text-center text-red-600">No doctor found with this ID.</p>;
+  if (!doctor)
+    return (
+      <p className="text-center text-red-600">No doctor found with this ID.</p>
+    );
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <div className="bg-white rounded-lg overflow-hidden flex flex-col items-center justify-center md:flex-row">
+      <div className="bg-white rounded-lg overflow-hidden flex flex-col items-center justify-center min-h-screen  md:flex-row">
         <img
           src={doctor.image}
           alt={doctor.name}
           className="w-full md:w-1/3 h-64 md:h-auto object-cover"
         />
         <div className="p-6 flex-1">
-          <h1 className="text-4xl font-extrabold text-blue-800 mb-4">{doctor.name}</h1>
-          <p className="text-xl text-blue-700 mb-2">Specialty: <span className="font-semibold">{doctor.specialty}</span></p>
-          <p className="text-lg text-gray-800 mb-2">Experience: <span className="font-semibold">{doctor.experience} years</span></p>
-          <p className="text-lg text-gray-800 mb-2">Age: <span className="font-semibold">{doctor.age}</span></p>
-          <p className="text-lg text-gray-800 mb-2">Category: <span className="font-semibold">{doctor.category}</span></p>
-          <p className="text-lg text-gray-800 mb-2">Contact: <span className="font-semibold">{doctor.contact}</span></p>
-          <p className="text-lg text-gray-800 mb-2">Email: <span className="font-semibold">{doctor.email}</span></p>
+          <h1 className="text-4xl font-extrabold text-blue-800 mb-4">
+            {doctor.name}
+          </h1>
+          <p className="text-xl text-blue-700 mb-2">
+            Specialty: <span className="font-semibold">{doctor.specialty}</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
+            Experience:{" "}
+            <span className="font-semibold">{doctor.experience} years</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
+            Age: <span className="font-semibold">{doctor.age}</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
+            Category: <span className="font-semibold">{doctor.category}</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
+            Contact: <span className="font-semibold">{doctor.contact}</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
+            Email: <span className="font-semibold">{doctor.email}</span>
+          </p>
           <div className="mt-6 flex justify-center gap-4">
             <Link
               to={`/edit-doctor/${id}`}
