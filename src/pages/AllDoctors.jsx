@@ -20,7 +20,7 @@ function AllDoctors() {
           ...doc.data(),
         }));
         setDoctors(docs);
-        setFilteredDoctors(docs); // Initialize filteredDoctors with all doctors
+        setFilteredDoctors(docs);
       } catch (error) {
         console.error("Error fetching doctors: ", error);
       }
@@ -30,7 +30,6 @@ function AllDoctors() {
   }, []);
 
   useEffect(() => {
-    // Apply search filter whenever search term changes
     const filtered = doctors.filter((doctor) =>
       doctor.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -65,7 +64,7 @@ function AllDoctors() {
       </div>
       <div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto"
-        style={{ maxHeight: "calc(100vh - 150px)" }} // Adjust maxHeight based on header/footer
+        style={{ maxHeight: "calc(100vh - 150px)" }}
       >
         {filteredDoctors.map((doctor) => (
           <Link
@@ -76,7 +75,7 @@ function AllDoctors() {
             <img
               src={doctor.image}
               alt={doctor.name}
-              className="w-32 h-32 rounded-full mb-4 object-cover"
+              className="w-32 h-32 rounded-full mb-4 "
             />
             <h2 className="text-xl font-semibold mb-2">{doctor.name}</h2>
             <p className="text-blue-800 text-md font-medium mb-4">

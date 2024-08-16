@@ -18,7 +18,6 @@ function App() {
   return (
     <BrowserRouter>
       <div className="flex justify-between">
-        {/* Check if the path does not match the routes where you want to hide SideNav */}
         {currentPath !== "/" && <SideNav />}
         <main className="flex-grow">
           <Routes>
