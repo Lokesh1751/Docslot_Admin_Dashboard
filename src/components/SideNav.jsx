@@ -16,7 +16,7 @@ function SideNav() {
   console.log(currloc);
 
   return (
-    <div className="bg-[#0046C0] flex flex-col h-[100vh] w-[270px]">
+    <div className="bg-[#0046C0] flex flex-col h-[120vh] w-[270px]">
       {/* Logo Section */}
       <div className="flex gap-2 p-6 items-center">
         <div className="bg-white p-4 rounded-full">

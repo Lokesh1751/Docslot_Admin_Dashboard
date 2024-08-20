@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { FIRESTORE_DB } from "../firebase.config";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function AllDoctors() {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +25,8 @@ function AllDoctors() {
         setFilteredDoctors(docs);
       } catch (error) {
         console.error("Error fetching doctors: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,42 +66,49 @@ function AllDoctors() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto"
-        style={{ maxHeight: "calc(100vh - 150px)" }}
-      >
-        {filteredDoctors.map((doctor) => (
-          <Link
-            key={doctor.id}
-            className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center"
-            to={`/docinfo/${doctor.id}`}
-          >
-            <img
-              src={doctor.image}
-              alt={doctor.name}
-              className="w-32 h-32 rounded-full mb-4 "
-            />
-            <h2 className="text-xl font-semibold mb-2">{doctor.name}</h2>
-            <p className="text-blue-800 text-md font-medium mb-4">
-              Specialty: {doctor.specialty}
-            </p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => handleEdit(doctor.id)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(doctor.id)}
-                className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                Delete
-              </button>
+      {loading ? (
+        <div className="flex items-center justify-center h-screen">
+          <ClipLoader color="#0046C0" loading={loading} size={50} />
+        </div>
+      ) : (
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto"
+          style={{ maxHeight: "calc(100vh - 150px)" }}
+        >
+          {filteredDoctors.map((doctor) => (
+            <div
+              key={doctor.id}
+              className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center"
+            >
+              <Link to={`/docinfo/${doctor.id}`}>
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="w-32 h-32 rounded-full mb-4 "
+                />
+              </Link>
+              <h2 className="text-xl font-semibold mb-2">{doctor.name}</h2>
+              <p className="text-blue-800 text-md font-medium mb-4">
+                Specialty: {doctor.specialty}
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => handleEdit(doctor.id)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(doctor.id)}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </Link>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

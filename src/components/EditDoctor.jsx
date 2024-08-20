@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FIRESTORE_DB } from "../firebase.config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function EditDoctor() {
   const { id } = useParams();
@@ -60,7 +61,12 @@ function EditDoctor() {
     }
   };
 
-  if (loading) return <p className="text-center text-gray-600">Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <ClipLoader color="#0046C0" loading={loading} size={50} />
+      </div>
+    );
 
   if (!doctor)
     return (
