@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { query, where, collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  query,
+  where,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase.config"; // Adjust the import path
 
 function Login() {
@@ -25,11 +32,11 @@ function Login() {
           // Only allow admin to login
           if (userData.role === "admin") {
             console.log("Admin signed in:", email);
-            
+
             // Update the loggedin field in Firestore
             const userDocRef = doc(FIRESTORE_DB, "users", userDoc.id);
             await updateDoc(userDocRef, { loggedin: "true" });
-            
+
             setLoggedIn("true"); // Set loggedIn to true
             window.location.href = "/dashboard"; // Redirect to admin dashboard
           } else {
@@ -48,17 +55,18 @@ function Login() {
   };
 
   return (
-    <div       className="flex justify-center items-center h-screen"
-    style={{
-      backgroundImage:
-        "url(https://img.freepik.com/free-photo/blurred-abstract-background-interior-view-looking-out-toward-empty-office-lobby-entrance-doors-glass-curtain-wall-with-frame_1339-6363.jpg)",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-    }}
->
+    <div
+      className="flex justify-center items-center h-screen"
+      style={{
+        backgroundImage:
+          "url(https://img.freepik.com/free-photo/blurred-abstract-background-interior-view-looking-out-toward-empty-office-lobby-entrance-doors-glass-curtain-wall-with-frame_1339-6363.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-      <h1 className="text-center text-3xl text-[#0143BE] items-center  justify-center font-bold flex gap-2">
+        <h1 className="text-center text-3xl text-[#0143BE] items-center  justify-center font-bold flex gap-2">
           DocSlot{" "}
           <img
             src="https://rukminim2.flixcart.com/image/850/1000/xif0q/wall-decoration/j/s/d/doctor-logo-1-doctor-1-6x5in-doctor-logo-decalbazaar-original-imagpnchqbfc3jf2.jpeg?q=90&crop=false"
@@ -70,8 +78,7 @@ function Login() {
           Admin Dashboard
         </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {error && <p className="text-red-500">{error}</p>} 
-
+          {error && <p className="text-red-500">{error}</p>}
 
           <div>
             <label
