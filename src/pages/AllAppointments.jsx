@@ -59,50 +59,53 @@ function AllAppointments() {
         All Appointments
       </h1>
 
-      {appointments.length === 0 ? (
-        <p className="text-center text-lg font-semibold text-gray-500">
-          No appointments found.
-        </p>
-      ) : (
-        appointments.map((appointment) => (
-          <div
-            key={appointment.id}
-            className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm"
-          >
-            {appointment.appointments.map((app, index) => (
-              <div
-                key={index}
-                className="p-4 bg-gray-50 rounded-lg shadow-sm mb-4 flex flex-col"
-              >
-                <p className="flex items-center mb-2">
-                  <strong className="text-gray-700 mr-2">Patient:</strong>{" "}
-                  {app.name}
-                </p>
-                <p className="flex items-center mb-2">
-                  <strong className="text-gray-700 mr-2">Date:</strong>{" "}
-                  {app.date}
-                </p>
-                <p className="flex items-center mb-2">
-                  <strong className="text-gray-700 mr-2">Doctor:</strong>{" "}
-                  {app.selectedDoctor}
-                </p>
-                <p className="flex items-center mb-2">
-                  <strong className="text-gray-700 mr-2">Status:</strong>
-                  {app.approved ? (
-                    <span className="text-green-600 flex items-center">
-                      <FaCheckCircle className="mr-1" /> Approved
-                    </span>
-                  ) : (
-                    <span className="text-red-600 flex items-center">
-                      <FaTimesCircle className="mr-1" /> Pending
-                    </span>
-                  )}
-                </p>
-              </div>
-            ))}
-          </div>
-        ))
-      )}
+      {/* Scrollable Container */}
+      <div className="h-screen overflow-y-scroll">
+        {appointments.length === 0 ? (
+          <p className="text-center text-lg font-semibold text-gray-500">
+            No appointments found.
+          </p>
+        ) : (
+          appointments.map((appointment) => (
+            <div
+              key={appointment.id}
+              className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm"
+            >
+              {appointment.appointments.map((app, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-lg shadow-sm mb-4 flex flex-col"
+                >
+                  <p className="flex items-center mb-2">
+                    <strong className="text-gray-700 mr-2">Patient:</strong>{" "}
+                    {app.name}
+                  </p>
+                  <p className="flex items-center mb-2">
+                    <strong className="text-gray-700 mr-2">Date:</strong>{" "}
+                    {app.date}
+                  </p>
+                  <p className="flex items-center mb-2">
+                    <strong className="text-gray-700 mr-2">Doctor:</strong>{" "}
+                    {app.selectedDoctor}
+                  </p>
+                  <p className="flex items-center mb-2">
+                    <strong className="text-gray-700 mr-2">Status:</strong>
+                    {app.approved ? (
+                      <span className="text-green-600 flex items-center">
+                        <FaCheckCircle className="mr-1" /> Approved
+                      </span>
+                    ) : (
+                      <span className="text-red-600 flex items-center">
+                        <FaTimesCircle className="mr-1" /> Pending
+                      </span>
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
