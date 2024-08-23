@@ -86,6 +86,7 @@ function DoctorInfo() {
           <p className="text-lg text-gray-800 mb-2">
             Email: <span className="font-semibold">{doctor.email}</span>
           </p>
+          <h1 className="text-blue-800 font-bold">DashBoard Password :{id}</h1>
           <div className="mt-6 flex justify-center gap-4">
             <Link
               to={`/edit-doctor/${id}`}
