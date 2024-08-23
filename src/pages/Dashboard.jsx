@@ -1,68 +1,132 @@
 import React, { useEffect, useState } from "react";
-import { FIRESTORE_DB } from "../firebase.config"; // Adjust path if needed
+import { FIRESTORE_DB } from "../firebase.config";
 import { collection, getDocs } from "firebase/firestore";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, Title, ArcElement } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
+const categories = [
+  { id: 1, name: "Cardiology", color: "#FF6F61" },
+  { id: 2, name: "Dermatology", color: "#6A1B9A" },
+  { id: 3, name: "Gastroenterology", color: "#FFB74D" },
+  { id: 4, name: "Neurology", color: "#4CAF50" },
+  { id: 5, name: "Oncology", color: "#00BCD4" },
+  { id: 6, name: "Pediatrics", color: "#E91E63" },
+  { id: 7, name: "Orthopedics", color: "#FFC107" },
+  { id: 8, name: "Ophthalmology", color: "#3F51B5" },
+  { id: 9, name: "Psychiatry", color: "#FF5722" },
+];
+
 function Dashboard() {
   const [doctorCount, setDoctorCount] = useState(0);
-  const [appointmentCount, setAppointmentCount] = useState(0);
-  const [approvedCount, setApprovedCount] = useState(0);
-  const [notApprovedCount, setNotApprovedCount] = useState(0);
+  const [totalAppointments, setTotalAppointments] = useState(0);
+  const [doctorCategoryCount, setDoctorCategoryCount] = useState({});
+  const [experienceData, setExperienceData] = useState({
+    lessThan7Years: 0,
+    moreThan7Years: 0,
+  });
+  const [approvedAppointmentsData, setApprovedAppointmentsData] = useState({
+    approved: 0,
+    unapproved: 0,
+  });
 
   useEffect(() => {
-    // Fetch total number of doctors
-    const fetchDoctorCount = async () => {
+    const fetchDoctorData = async () => {
       try {
         const doctorsCollection = collection(FIRESTORE_DB, "doctors");
         const doctorSnapshot = await getDocs(doctorsCollection);
+
+        let categoryCounts = {};
+        let lessThan7Years = 0;
+        let moreThan7Years = 0;
+
+        doctorSnapshot.docs.forEach((doc) => {
+          const data = doc.data();
+          const category = data.category;
+          const experience = data.experience;
+
+          if (categoryCounts[category]) {
+            categoryCounts[category]++;
+          } else {
+            categoryCounts[category] = 1;
+          }
+
+          if (experience >= 7) {
+            moreThan7Years++;
+          } else {
+            lessThan7Years++;
+          }
+        });
+
         setDoctorCount(doctorSnapshot.size);
+        setDoctorCategoryCount(categoryCounts);
+        setExperienceData({ lessThan7Years, moreThan7Years });
       } catch (error) {
-        console.error("Error fetching doctor count: ", error);
+        console.error("Error fetching doctor data: ", error);
       }
     };
 
-    // Fetch total number of approved and not approved appointments
     const fetchAppointmentData = async () => {
       try {
         const appointmentsCollection = collection(
           FIRESTORE_DB,
           "docslot_users"
         );
-        const appointmentSnapshot = await getDocs(appointmentsCollection);
+        const appointmentsSnapshot = await getDocs(appointmentsCollection);
 
-        let totalAppointments = 0;
-        let totalApproved = 0;
-        let totalNotApproved = 0;
+        let approved = 0;
+        let unapproved = 0;
 
-        appointmentSnapshot.docs.forEach((doc) => {
+        appointmentsSnapshot.docs.forEach((doc) => {
           const data = doc.data();
-          const appointments = data.appointments || [];
-          totalAppointments += appointments.length;
-          totalApproved += appointments.filter((a) => a.approved).length;
-          totalNotApproved += appointments.filter((a) => !a.approved).length;
+
+          // Check if the appointments array exists
+          if (data.appointments && Array.isArray(data.appointments)) {
+            // Loop through each appointment in the appointments array
+            data.appointments.forEach((appointment) => {
+              setTotalAppointments(totalAppointments + 1);
+              if (appointment.approved) {
+                approved++;
+              } else {
+                unapproved++;
+              }
+            });
+          }
         });
 
-        setAppointmentCount(totalAppointments);
-        setApprovedCount(totalApproved);
-        setNotApprovedCount(totalNotApproved);
+        console.log("Approved Appointments:", approved); // Debugging line
+        console.log("Unapproved Appointments:", unapproved); // Debugging line
+
+        setTotalAppointments(appointmentsSnapshot.size);
+        setApprovedAppointmentsData({ approved, unapproved });
       } catch (error) {
         console.error("Error fetching appointment data: ", error);
       }
     };
 
-    fetchDoctorCount();
+    fetchDoctorData();
     fetchAppointmentData();
   }, []);
 
-  // Data for pie charts
-  const appointmentData = {
-    labels: ["Approved", "Not Approved"],
+  // Data for all pie charts
+  const categoryData = {
+    labels: Object.keys(doctorCategoryCount),
     datasets: [
       {
-        data: [approvedCount, notApprovedCount],
+        data: Object.values(doctorCategoryCount),
+        backgroundColor: categories.map((category) => category.color),
+        borderColor: "#fff",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const experienceDataChart = {
+    labels: ["Less than 7 years", "More than 7 years"],
+    datasets: [
+      {
+        data: [experienceData.lessThan7Years, experienceData.moreThan7Years],
         backgroundColor: ["#36A2EB", "#FF6384"],
         borderColor: "#fff",
         borderWidth: 2,
@@ -70,24 +134,27 @@ function Dashboard() {
     ],
   };
 
-  const totalAppointmentsData = {
-    labels: ["Total Appointments"],
+  const approvedAppointmentsChart = {
+    labels: ["Approved", "Unapproved"],
     datasets: [
       {
-        data: [appointmentCount],
-        backgroundColor: ["#FFCE56"],
+        data: [
+          approvedAppointmentsData.approved,
+          approvedAppointmentsData.unapproved,
+        ],
+        backgroundColor: ["#4CAF50", "#FF5722"],
         borderColor: "#fff",
         borderWidth: 2,
       },
     ],
   };
 
-  const totalDoctorsData = {
+  const totalDoctorsChart = {
     labels: ["Total Doctors"],
     datasets: [
       {
         data: [doctorCount],
-        backgroundColor: ["#4BC0C0"],
+        backgroundColor: ["#42A5F5"],
         borderColor: "#fff",
         borderWidth: 2,
       },
@@ -95,18 +162,29 @@ function Dashboard() {
   };
 
   return (
-    <div className="space-x-8 p-6 flex flex-wrap justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-80 h-80 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center">
-        <Pie data={totalAppointmentsData} />
-        <span className="text-xl font-bold mt-4">Total Appointments</span>
+    <div className="flex items-center  h-screen flex-wrap gap-1 m-4">
+      <div className="h-70 w-70 shadow-lg rounded-lg ">
+        <h2 className="text-lg font-bold text-center mb-4">Total Doctors</h2>
+        <Pie data={totalDoctorsChart} />
       </div>
-      <div className="w-80 h-80 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center">
-        <Pie data={totalDoctorsData} />
-        <span className="text-xl font-bold mt-4">Total Doctors</span>
+
+      <div className="h-70 w-70 shadow-lg rounded-lg ">
+        <h2 className="text-lg font-bold text-center mb-4">
+          Doctor Experience
+        </h2>
+        <Pie data={experienceDataChart} />
       </div>
-      <div className="w-80 h-80 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center">
-        <Pie data={appointmentData} />
-        <span className="text-xl font-bold mt-4">Appointments Status</span>
+      <div className="h-70 w-70 shadow-lg rounded-lg ">
+        <h2 className="text-lg font-bold text-center mb-4">
+          Approved Appointments
+        </h2>
+        <Pie data={approvedAppointmentsChart} />
+      </div>
+      <div className="h-70 w-70 shadow-lg rounded-lg ">
+        <h2 className="text-lg font-bold text-center mb-4">
+          Doctor Categories
+        </h2>
+        <Pie data={categoryData} />
       </div>
     </div>
   );
