@@ -77,15 +77,16 @@ function Dashboard() {
 
         let approved = 0;
         let unapproved = 0;
+        let totalAppointmentsCount = 0;
 
         appointmentsSnapshot.docs.forEach((doc) => {
           const data = doc.data();
 
           // Check if the appointments array exists
           if (data.appointments && Array.isArray(data.appointments)) {
+            totalAppointmentsCount += data.appointments.length;
             // Loop through each appointment in the appointments array
             data.appointments.forEach((appointment) => {
-              setTotalAppointments(totalAppointments + 1);
               if (appointment.approved) {
                 approved++;
               } else {
@@ -98,7 +99,7 @@ function Dashboard() {
         console.log("Approved Appointments:", approved); // Debugging line
         console.log("Unapproved Appointments:", unapproved); // Debugging line
 
-        setTotalAppointments(appointmentsSnapshot.size);
+        setTotalAppointments(totalAppointmentsCount);
         setApprovedAppointmentsData({ approved, unapproved });
       } catch (error) {
         console.error("Error fetching appointment data: ", error);
@@ -161,30 +162,53 @@ function Dashboard() {
     ],
   };
 
+  const totalAppointmentsChart = {
+    labels: ["Total Appointments"],
+    datasets: [
+      {
+        data: [totalAppointments],
+        backgroundColor: ["#AB47BC"],
+        borderColor: "#fff",
+        borderWidth: 2,
+      },
+    ],
+  };
+
   return (
-    <div className="flex items-center  h-screen flex-wrap gap-1 m-4">
-      <div className="h-70 w-70 shadow-lg rounded-lg ">
-        <h2 className="text-lg font-bold text-center mb-4">Total Doctors</h2>
+    <div className="flex flex-wrap items-center h-screen justify-center gap-6 p-6">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
+          Total Doctors
+        </h2>
         <Pie data={totalDoctorsChart} />
       </div>
 
-      <div className="h-70 w-70 shadow-lg rounded-lg ">
-        <h2 className="text-lg font-bold text-center mb-4">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
           Doctor Experience
         </h2>
         <Pie data={experienceDataChart} />
       </div>
-      <div className="h-70 w-70 shadow-lg rounded-lg ">
-        <h2 className="text-lg font-bold text-center mb-4">
+
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
           Approved Appointments
         </h2>
         <Pie data={approvedAppointmentsChart} />
       </div>
-      <div className="h-70 w-70 shadow-lg rounded-lg ">
-        <h2 className="text-lg font-bold text-center mb-4">
+
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
           Doctor Categories
         </h2>
         <Pie data={categoryData} />
+      </div>
+
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
+          Total Appointments
+        </h2>
+        <Pie data={totalAppointmentsChart} />
       </div>
     </div>
   );
