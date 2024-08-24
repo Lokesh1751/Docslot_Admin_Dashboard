@@ -164,7 +164,7 @@ function Dashboard() {
         label: "Doctor Experience",
         data: [experienceData.lessThan7Years, experienceData.moreThan7Years],
         backgroundColor: ["#0046C0", "#0066CC"],
-        borderColor: "#fff",
+        borderColor: "#0046C0",
         borderWidth: 1,
       },
     ],
