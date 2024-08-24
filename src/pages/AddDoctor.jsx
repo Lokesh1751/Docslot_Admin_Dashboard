@@ -35,6 +35,7 @@ const AddDoctor = () => {
     experience: "",
     contact: "",
     email: "",
+    gender: "",
   });
 
   const [imagePreview, setImagePreview] = useState("");
@@ -65,6 +66,7 @@ const AddDoctor = () => {
         experience: "",
         contact: "",
         email: "",
+        gender: "",
       });
       setImagePreview("");
     } catch (err) {
@@ -154,6 +156,29 @@ const AddDoctor = () => {
             </div>
             <div className="w-full md:w-1/2">
               <label
+                htmlFor="gender"
+                className="block text-gray-600 mb-2 flex items-center"
+              >
+                <FaUser className="mr-2 text-gray-500" />
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-md"
+                required
+              >
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="w-full md:w-1/2">
+              <label
                 htmlFor="age"
                 className="block text-gray-600 mb-2 flex items-center"
               >
@@ -171,8 +196,6 @@ const AddDoctor = () => {
                 required
               />
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
               <label
                 htmlFor="specialty"
@@ -191,6 +214,8 @@ const AddDoctor = () => {
                 placeholder="Enter specialty"
               />
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
               <label
                 htmlFor="experience"
@@ -209,8 +234,6 @@ const AddDoctor = () => {
                 placeholder="Enter years of experience"
               />
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-1/2">
               <label
                 htmlFor="contact"
@@ -229,35 +252,32 @@ const AddDoctor = () => {
                 placeholder="Enter contact number"
               />
             </div>
-            <div className="w-full md:w-1/2">
-              <label
-                htmlFor="email"
-                className="block text-gray-600 mb-2 flex items-center"
-              >
-                <FaEnvelope className="mr-2 text-gray-500" />
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                placeholder="Enter email address"
-                required
-              />
-            </div>
           </div>
-          <div className="text-center">
-            <button
-              type="submit"
-              className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition ease-in-out duration-300"
-              onClick={() => handleSubmit}
+          <div className="w-full">
+            <label
+              htmlFor="email"
+              className="block text-gray-600 mb-2 flex items-center"
             >
-              Add Doctor
-            </button>
+              <FaEnvelope className="mr-2 text-gray-500" />
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-md"
+              placeholder="Enter email"
+              required
+            />
           </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-800 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"
+          >
+            Add Doctor
+          </button>
         </form>
       </div>
     </div>

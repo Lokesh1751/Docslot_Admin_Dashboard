@@ -1,21 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { FIRESTORE_DB } from "../firebase.config";
 import { collection, getDocs } from "firebase/firestore";
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, Tooltip, Legend, Title, ArcElement } from "chart.js";
+import { Bar, Line, Doughnut, Radar, PolarArea } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  Tooltip,
+  Legend,
+  Title,
+  ArcElement,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  PolarAreaController,
+} from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  PolarAreaController
+);
 
 const categories = [
-  { id: 1, name: "Cardiology", color: "#FF6F61" },
-  { id: 2, name: "Dermatology", color: "#6A1B9A" },
-  { id: 3, name: "Gastroenterology", color: "#FFB74D" },
-  { id: 4, name: "Neurology", color: "#4CAF50" },
-  { id: 5, name: "Oncology", color: "#00BCD4" },
-  { id: 6, name: "Pediatrics", color: "#E91E63" },
-  { id: 7, name: "Orthopedics", color: "#FFC107" },
-  { id: 8, name: "Ophthalmology", color: "#3F51B5" },
-  { id: 9, name: "Psychiatry", color: "#FF5722" },
+  { id: 1, name: "Cardiology", color: "#0046C0" },
+  { id: 2, name: "Dermatology", color: "#0046C0" },
+  { id: 3, name: "Gastroenterology", color: "#0046C0" },
+  { id: 4, name: "Neurology", color: "#0046C0" },
+  { id: 5, name: "Oncology", color: "#0046C0" },
+  { id: 6, name: "Pediatrics", color: "#0046C0" },
+  { id: 7, name: "Orthopedics", color: "#0046C0" },
+  { id: 8, name: "Ophthalmology", color: "#0046C0" },
+  { id: 9, name: "Psychiatry", color: "#0046C0" },
 ];
 
 function Dashboard() {
@@ -30,6 +55,10 @@ function Dashboard() {
     approved: 0,
     unapproved: 0,
   });
+  const [genderData, setGenderData] = useState({
+    male: 0,
+    female: 0,
+  });
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -40,11 +69,14 @@ function Dashboard() {
         let categoryCounts = {};
         let lessThan7Years = 0;
         let moreThan7Years = 0;
+        let maleCount = 0;
+        let femaleCount = 0;
 
         doctorSnapshot.docs.forEach((doc) => {
           const data = doc.data();
           const category = data.category;
           const experience = data.experience;
+          const gender = data.gender;
 
           if (categoryCounts[category]) {
             categoryCounts[category]++;
@@ -57,11 +89,18 @@ function Dashboard() {
           } else {
             lessThan7Years++;
           }
+
+          if (gender === "Male") {
+            maleCount++;
+          } else if (gender === "Female") {
+            femaleCount++;
+          }
         });
 
         setDoctorCount(doctorSnapshot.size);
         setDoctorCategoryCount(categoryCounts);
         setExperienceData({ lessThan7Years, moreThan7Years });
+        setGenderData({ male: maleCount, female: femaleCount });
       } catch (error) {
         console.error("Error fetching doctor data: ", error);
       }
@@ -82,10 +121,8 @@ function Dashboard() {
         appointmentsSnapshot.docs.forEach((doc) => {
           const data = doc.data();
 
-          // Check if the appointments array exists
           if (data.appointments && Array.isArray(data.appointments)) {
             totalAppointmentsCount += data.appointments.length;
-            // Loop through each appointment in the appointments array
             data.appointments.forEach((appointment) => {
               if (appointment.approved) {
                 approved++;
@@ -95,9 +132,6 @@ function Dashboard() {
             });
           }
         });
-
-        console.log("Approved Appointments:", approved); // Debugging line
-        console.log("Unapproved Appointments:", unapproved); // Debugging line
 
         setTotalAppointments(totalAppointmentsCount);
         setApprovedAppointmentsData({ approved, unapproved });
@@ -110,15 +144,15 @@ function Dashboard() {
     fetchAppointmentData();
   }, []);
 
-  // Data for all pie charts
   const categoryData = {
     labels: Object.keys(doctorCategoryCount),
     datasets: [
       {
+        label: "Doctors by Category",
         data: Object.values(doctorCategoryCount),
         backgroundColor: categories.map((category) => category.color),
         borderColor: "#fff",
-        borderWidth: 2,
+        borderWidth: 1,
       },
     ],
   };
@@ -127,10 +161,11 @@ function Dashboard() {
     labels: ["Less than 7 years", "More than 7 years"],
     datasets: [
       {
+        label: "Doctor Experience",
         data: [experienceData.lessThan7Years, experienceData.moreThan7Years],
-        backgroundColor: ["#36A2EB", "#FF6384"],
+        backgroundColor: ["#0046C0", "#0066CC"],
         borderColor: "#fff",
-        borderWidth: 2,
+        borderWidth: 1,
       },
     ],
   };
@@ -139,13 +174,27 @@ function Dashboard() {
     labels: ["Approved", "Unapproved"],
     datasets: [
       {
+        label: "Appointments Status",
         data: [
           approvedAppointmentsData.approved,
           approvedAppointmentsData.unapproved,
         ],
-        backgroundColor: ["#4CAF50", "#FF5722"],
+        backgroundColor: ["#0046C0", "#0066CC"],
         borderColor: "#fff",
-        borderWidth: 2,
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const genderDataChart = {
+    labels: ["Male", "Female"],
+    datasets: [
+      {
+        label: "Gender Distribution",
+        data: [genderData.male, genderData.female],
+        backgroundColor: ["#0046C0", "#0066CC"],
+        borderColor: "#fff",
+        borderWidth: 1,
       },
     ],
   };
@@ -154,10 +203,11 @@ function Dashboard() {
     labels: ["Total Doctors"],
     datasets: [
       {
+        label: "Total Doctors",
         data: [doctorCount],
-        backgroundColor: ["#42A5F5"],
+        backgroundColor: ["#0046C0"],
         borderColor: "#fff",
-        borderWidth: 2,
+        borderWidth: 1,
       },
     ],
   };
@@ -166,49 +216,55 @@ function Dashboard() {
     labels: ["Total Appointments"],
     datasets: [
       {
+        label: "Total Appointments",
         data: [totalAppointments],
-        backgroundColor: ["#AB47BC"],
+        backgroundColor: ["#0046C0"],
         borderColor: "#fff",
-        borderWidth: 2,
+        borderWidth: 1,
       },
     ],
   };
 
   return (
-    <div className="flex flex-wrap items-center h-screen justify-center gap-6 p-6">
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+    <div className="flex flex-wrap items-center h-screen justify-center gap-6 p-6 bg-white">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
         <h2 className="text-lg font-semibold text-center mb-4">
           Total Doctors
         </h2>
-        <Pie data={totalDoctorsChart} />
+        <PolarArea data={totalDoctorsChart} />
       </div>
 
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
         <h2 className="text-lg font-semibold text-center mb-4">
           Doctor Experience
         </h2>
-        <Pie data={experienceDataChart} />
+        <Line data={experienceDataChart} />
       </div>
-
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Approved Appointments
-        </h2>
-        <Pie data={approvedAppointmentsChart} />
-      </div>
-
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
         <h2 className="text-lg font-semibold text-center mb-4">
           Doctor Categories
         </h2>
-        <Pie data={categoryData} />
+        <Bar data={categoryData} />
+      </div>
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
+        <h2 className="text-lg font-semibold text-center mb-4">
+          Approved Appointments
+        </h2>
+        <Doughnut data={approvedAppointmentsChart} />
       </div>
 
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-white">
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-white">
         <h2 className="text-lg font-semibold text-center mb-4">
           Total Appointments
         </h2>
-        <Pie data={totalAppointmentsChart} />
+        <PolarArea data={totalAppointmentsChart} />
+      </div>
+
+      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-white">
+        <h2 className="text-lg font-semibold text-center mb-4">
+          Doctor Gender Distribution
+        </h2>
+        <Radar data={genderDataChart} />
       </div>
     </div>
   );

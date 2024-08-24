@@ -78,6 +78,9 @@ function DoctorInfo() {
             Age: <span className="font-semibold">{doctor.age}</span>
           </p>
           <p className="text-lg text-gray-800 mb-2">
+            Gender: <span className="font-semibold">{doctor.gender}</span>
+          </p>
+          <p className="text-lg text-gray-800 mb-2">
             Category: <span className="font-semibold">{doctor.category}</span>
           </p>
           <p className="text-lg text-gray-800 mb-2">
