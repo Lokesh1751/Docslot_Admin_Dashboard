@@ -17,6 +17,7 @@ function EditDoctor() {
     contact: "",
     email: "",
     image: "",
+    gender: "", // Add gender field
   });
   const navigate = useNavigate();
 
@@ -126,6 +127,24 @@ function EditDoctor() {
             value={formData.image}
             onChange={handleChange}
           />
+          {/* New Gender Field */}
+          <div className="flex flex-col">
+            <label htmlFor="gender" className="text-lg font-medium mb-1">
+              Gender
+            </label>
+            <select
+              id="gender"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-md p-2"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
         </div>
         <button
           type="submit"

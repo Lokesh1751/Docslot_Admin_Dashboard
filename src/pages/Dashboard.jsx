@@ -226,45 +226,50 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex flex-wrap items-center h-screen justify-center gap-6 p-6 bg-white">
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Total Doctors
-        </h2>
-        <PolarArea data={totalDoctorsChart} />
-      </div>
+    <div>
+      <h1 className="text-blue-800 mt-10 font-bold text-3xl text-center">
+        Admin Detailed Dashboard
+      </h1>
+      <div className="flex flex-wrap items-center h-screen justify-center gap-6 p-6 bg-white">
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Total Doctors
+          </h2>
+          <PolarArea data={totalDoctorsChart} />
+        </div>
 
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Doctor Experience
-        </h2>
-        <Line data={experienceDataChart} />
-      </div>
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Doctor Categories
-        </h2>
-        <Bar data={categoryData} />
-      </div>
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Approved Appointments
-        </h2>
-        <Doughnut data={approvedAppointmentsChart} />
-      </div>
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Doctor Experience
+          </h2>
+          <Line data={experienceDataChart} />
+        </div>
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Doctor Categories
+          </h2>
+          <Bar data={categoryData} />
+        </div>
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-blue-800">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Approved Appointments
+          </h2>
+          <Doughnut data={approvedAppointmentsChart} />
+        </div>
 
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-white">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Total Appointments
-        </h2>
-        <PolarArea data={totalAppointmentsChart} />
-      </div>
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-white">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Total Appointments
+          </h2>
+          <PolarArea data={totalAppointmentsChart} />
+        </div>
 
-      <div className="flex-1 max-w-xs shadow-lg rounded-lg p-4 bg-[#fbf9f9]  text-white">
-        <h2 className="text-lg font-semibold text-center mb-4">
-          Doctor Gender Distribution
-        </h2>
-        <Radar data={genderDataChart} />
+        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9]  text-white">
+          <h2 className="text-lg font-semibold text-center mb-4">
+            Doctor Gender Distribution
+          </h2>
+          <Radar data={genderDataChart} />
+        </div>
       </div>
     </div>
   );
