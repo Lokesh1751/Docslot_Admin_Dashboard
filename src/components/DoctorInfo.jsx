@@ -57,11 +57,11 @@ function DoctorInfo() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <div className="bg-white rounded-lg overflow-hidden flex flex-col items-center justify-center min-h-screen  md:flex-row">
+      <div className="bg-white rounded-lg overflow-hidden flex flex-col items-center justify-center min-h-screen md:flex-row">
         <img
           src={doctor.image}
           alt={doctor.name}
-          className="w-full md:w-1/3 h-64 md:h-auto object-cover"
+          className="w-[460px] h-[500px]  rounded-xl" // Fixed size with object-cover
         />
         <div className="p-6 flex-1">
           <h1 className="text-4xl font-extrabold text-blue-800 mb-4">
@@ -93,7 +93,7 @@ function DoctorInfo() {
           <div className="mt-6 flex justify-center gap-4">
             <Link
               to={`/edit-doctor/${id}`}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-800 text-white rounded-md shadow-md hover:bg-blue-700"
             >
               Edit
             </Link>
