@@ -237,7 +237,7 @@ const AddDoctor = () => {
             <div className="w-full md:w-1/2">
               <label
                 htmlFor="contact"
-                className="block text-gray-600 mb-2 flex items-center"
+                className="block text-gray-600 mb-2  items-center"
               >
                 <FaPhone className="mr-2 text-gray-500" />
                 Contact Number
