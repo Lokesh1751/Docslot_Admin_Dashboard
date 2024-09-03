@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   FaHeartbeat,
   FaBrain,
@@ -9,6 +9,7 @@ import {
   FaSyringe,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AdminContext } from "../components/context/AdminContext";
 
 const categories = [
   { id: 1, name: "Cardiology", icon: <FaHeartbeat color="#FF6F61" /> },
@@ -23,6 +24,17 @@ const categories = [
 ];
 
 const Categories = () => {
+  const { loggedIn } = useContext(AdminContext);
+
+if (!loggedIn) {
+  return (
+    <div className="flex items-center justify-center h-screen ">
+      <h1 className="text-2xl font-bold text-blue-800">
+        Login as Admin First
+      </h1>
+    </div>
+  );
+}
   return (
     <div className="p-6  rounded-lg ">
       <h2 className="text-2xl font-bold mb-4 text-center">Doctor Categories</h2>

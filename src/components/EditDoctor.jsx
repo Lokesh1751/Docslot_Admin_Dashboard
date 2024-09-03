@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FIRESTORE_DB } from "../firebase.config";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import ClipLoader from "react-spinners/ClipLoader";
+import { AdminContext } from "./context/AdminContext";
 
 function EditDoctor() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ function EditDoctor() {
     gender: "", // Add gender field
   });
   const navigate = useNavigate();
+  const {loggedIn}=useContext(AdminContext)
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -73,7 +75,11 @@ function EditDoctor() {
     return (
       <p className="text-center text-red-600">No doctor found with this ID.</p>
     );
-
+    if (!loggedIn) {
+      return (
+        window.location.pathname="/"
+       );
+    }
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">Edit Doctor</h1>

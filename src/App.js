@@ -11,12 +11,14 @@ import DoctorInfo from "./components/DoctorInfo";
 import EditDoctor from "./components/EditDoctor";
 import Login from "./pages/Login";
 import AllDoctors from "./pages/AllDoctors";
+import { AdminProvider } from "../src/components/context/AdminContext";
 
 function App() {
   const currentPath = window.location.pathname;
 
   return (
     <BrowserRouter>
+      <AdminProvider>
       <div className="flex justify-between">
         {currentPath !== "/" && <SideNav />}
         <main className="flex-grow">
@@ -34,6 +36,7 @@ function App() {
           </Routes>
         </main>
       </div>
+      </AdminProvider>
     </BrowserRouter>
   );
 }

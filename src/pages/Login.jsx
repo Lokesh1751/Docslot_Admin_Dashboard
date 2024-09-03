@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   query,
   where,
@@ -8,12 +8,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase.config"; // Adjust the import path
+import { AdminContext } from "../components/context/AdminContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // To handle errors
-  const [loggedIn, setLoggedIn] = useState("false"); // Initialize loggedIn state
+  const { setLoggedIn } = useContext(AdminContext);
+  const [showpass, setshowPass] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,19 +32,11 @@ function Login() {
 
         // Check if the password matches
         if (userData.password === password) {
-          // Only allow admin to login
-          if (userData.role === "admin") {
-            console.log("Admin signed in:", email);
-
-            // Update the loggedin field in Firestore
-            const userDocRef = doc(FIRESTORE_DB, "users", userDoc.id);
-            await updateDoc(userDocRef, { loggedin: "true" });
-
-            setLoggedIn("true"); // Set loggedIn to true
-            window.location.href = "/dashboard"; // Redirect to admin dashboard
-          } else {
-            setError("You are not authorized to access this page.");
-          }
+          // Update the loggedin field in Firestore
+          const userDocRef = doc(FIRESTORE_DB, "users", userDoc.id);
+          await updateDoc(userDocRef, { loggedin: true });
+          setLoggedIn(true); // Set loggedIn to true
+          window.location.href = "/dashboard";
         } else {
           setError("Invalid email or password.");
         }
@@ -98,17 +93,30 @@ function Login() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
               Password
             </label>
+            {showpass
+              ? password && (
+                  <FaEye
+                    className="absolute right-3 top-9 text-gray-600"
+                    onClick={() => setshowPass(!showpass)}
+                  />
+                )
+              : password && (
+                  <FaEyeSlash
+                    className="absolute right-3 top-9 text-gray-600"
+                    onClick={() => setshowPass(!showpass)}
+                  />
+                )}
             <input
               id="password"
               name="password"
-              type="password"
+              type={`${showpass ? "password" : "text"}`}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}

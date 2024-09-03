@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FIRESTORE_DB } from "../firebase.config";
 import { collection, getDocs } from "firebase/firestore";
-import { Bar, Line, Doughnut, Radar, PolarArea } from "react-chartjs-2";
+import { Bar, Doughnut, Radar, PolarArea } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   Tooltip,
@@ -16,6 +16,7 @@ import {
   RadialLinearScale,
   PolarAreaController,
 } from "chart.js";
+import { AdminContext } from "../components/context/AdminContext";
 
 ChartJS.register(
   ArcElement,
@@ -59,6 +60,7 @@ function Dashboard() {
     male: 0,
     female: 0,
   });
+  const { loggedIn } = useContext(AdminContext);
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -226,51 +228,31 @@ function Dashboard() {
   };
 
   return (
-    <div>
-      <h1 className="text-blue-800 mt-10 font-bold text-3xl text-center">
-        Admin Detailed Dashboard
-      </h1>
-      <div className="flex flex-wrap items-center justify-center gap-6 p-6 bg-white min-h-screen">
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-blue-800">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Total Doctors
-          </h2>
-          <PolarArea data={totalDoctorsChart} />
+    <div className="p-4 space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 items-center justify-center h-screen">
+        <div className="bg-white shadow-lg rounded-lg p-2">
+          <h2 className="text-lg font-semibold mb-4">Doctors by Category</h2>
+          <Doughnut data={categoryData} />
         </div>
-
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-blue-800">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Doctor Experience
-          </h2>
-          <Line data={experienceDataChart} />
+        <div className="bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-4">Doctor Experience</h2>
+          <Radar data={experienceDataChart} />
         </div>
-
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-blue-800">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Doctor Categories
-          </h2>
-          <Bar data={categoryData} />
+        <div className="bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-4">Appointments Status</h2>
+          <PolarArea data={approvedAppointmentsChart} />
         </div>
-
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-blue-800">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Approved Appointments
-          </h2>
-          <Doughnut data={approvedAppointmentsChart} />
+        <div className="bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-4">Gender Distribution</h2>
+          <Bar data={genderDataChart} options={{ indexAxis: "x" }} />
         </div>
-
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-white">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Total Appointments
-          </h2>
-          <PolarArea data={totalAppointmentsChart} />
+        <div className="bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-4">Total Doctors</h2>
+          <Doughnut data={totalDoctorsChart} />
         </div>
-
-        <div className="flex-1 max-w-xs shadow-xl rounded-lg p-4 bg-[#fbf9f9] text-white">
-          <h2 className="text-lg font-semibold text-center mb-4">
-            Doctor Gender Distribution
-          </h2>
-          <Radar data={genderDataChart} />
+        <div className="bg-white shadow-lg rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-4">Total Appointments</h2>
+          <Doughnut data={totalAppointmentsChart} />
         </div>
       </div>
     </div>

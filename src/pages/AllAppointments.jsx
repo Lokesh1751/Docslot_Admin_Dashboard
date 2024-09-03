@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase.config";
 import { ClipLoader } from "react-spinners";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { AdminContext } from "../components/context/AdminContext";
 
 function AllAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { loggedIn } = useContext(AdminContext);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -22,9 +24,11 @@ function AllAppointments() {
           const appointmentsArray = userData.appointments || [];
 
           if (Array.isArray(appointmentsArray)) {
-            allAppointments.push({
-              id: userDoc.id,
-              appointments: appointmentsArray,
+            appointmentsArray.forEach((app) => {
+              allAppointments.push({
+                id: userDoc.id,
+                ...app,
+              });
             });
           }
         });
@@ -53,55 +57,48 @@ function AllAppointments() {
       <p className="text-center text-lg font-semibold text-red-500">{error}</p>
     );
 
+  if (!loggedIn) {
+    window.location.pathname = "/";
+    return null;
+  }
+
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold text-blue-800 text-center mb-6">
-        All Appointments
-      </h1>
-
-      {/* Scrollable Container */}
       <div className="h-screen overflow-y-scroll">
         {appointments.length === 0 ? (
           <p className="text-center text-lg font-semibold text-gray-500">
             No appointments found.
           </p>
         ) : (
-          appointments.map((appointment) => (
+          appointments.map((appointment, index) => (
             <div
-              key={appointment.id}
-              className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm"
+              key={index}
+              className="mb-6 p-4 border flex justify-between flex-wrap border-gray-200 rounded-lg shadow-sm"
             >
-              {appointment.appointments.map((app, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-50 rounded-lg shadow-sm mb-4 flex flex-col"
-                >
-                  <p className="flex items-center mb-2">
-                    <strong className="text-gray-700 mr-2">Patient:</strong>{" "}
-                    {app.name}
-                  </p>
-                  <p className="flex items-center mb-2">
-                    <strong className="text-gray-700 mr-2">Date:</strong>{" "}
-                    {app.date}
-                  </p>
-                  <p className="flex items-center mb-2">
-                    <strong className="text-gray-700 mr-2">Doctor:</strong>{" "}
-                    {app.selectedDoctor}
-                  </p>
-                  <p className="flex items-center mb-2">
-                    <strong className="text-gray-700 mr-2">Status:</strong>
-                    {app.approved ? (
-                      <span className="text-green-600 flex items-center">
-                        <FaCheckCircle className="mr-1" /> Approved
-                      </span>
-                    ) : (
-                      <span className="text-red-600 flex items-center">
-                        <FaTimesCircle className="mr-1" /> Pending
-                      </span>
-                    )}
-                  </p>
-                </div>
-              ))}
+              <p className="mb-2">
+                <strong className="text-gray-700">Patient:</strong>{" "}
+                {appointment.name}
+              </p>
+              <p className="mb-2">
+                <strong className="text-gray-700">Date:</strong>{" "}
+                {appointment.date}
+              </p>
+              <p className="mb-2">
+                <strong className="text-gray-700">Doctor:</strong>{" "}
+                {appointment.selectedDoctor}
+              </p>
+              <p className="mb-2 flex items-center">
+                <strong className="text-gray-700 mr-2">Status:</strong>
+                {appointment.approved ? (
+                  <span className="text-green-600 flex items-center">
+                    <FaCheckCircle className="mr-1" /> Approved
+                  </span>
+                ) : (
+                  <span className="text-red-600 flex items-center">
+                    <FaTimesCircle className="mr-1" /> Pending
+                  </span>
+                )}
+              </p>
             </div>
           ))
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaImage,
   FaUser,
@@ -10,6 +10,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 import { FIRESTORE_DB } from "../firebase.config";
+import { AdminContext } from "../components/context/AdminContext";
 import { addDoc, collection } from "firebase/firestore";
 
 const categories = [
@@ -39,6 +40,7 @@ const AddDoctor = () => {
   });
 
   const [imagePreview, setImagePreview] = useState("");
+  const { loggedIn } = useContext(AdminContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +75,9 @@ const AddDoctor = () => {
       console.log(err);
     }
   };
-
+  if (!loggedIn) {
+    return (window.location.pathname = "/");
+  }
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase.config";
 import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { AdminContext } from "./context/AdminContext";
 function Specialists() {
   const params = useParams();
   const [specialists, setSpecialists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {loggedIn}=useContext(AdminContext)
 
   useEffect(() => {
     const getSpecialists = async () => {
@@ -39,7 +41,11 @@ function Specialists() {
 
     getSpecialists();
   }, [params.name]);
-
+  if (!loggedIn) {
+    return (
+      window.location.pathname="/"
+     );
+  }
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-4">{params.name} Specialists</h1>

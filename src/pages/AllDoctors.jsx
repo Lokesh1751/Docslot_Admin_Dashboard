@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FIRESTORE_DB } from "../firebase.config";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { AdminContext } from "../components/context/AdminContext";
 
 function AllDoctors() {
   const [doctors, setDoctors] = useState([]);
@@ -11,6 +12,7 @@ function AllDoctors() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { loggedIn } = useContext(AdminContext);
 
   useEffect(() => {
     const getDoctors = async () => {
@@ -54,6 +56,15 @@ function AllDoctors() {
   const handleEdit = (id) => {
     navigate(`/edit-doctor/${id}`);
   };
+  if (!loggedIn) {
+    return (
+      <div className="flex items-center justify-center h-screen ">
+        <h1 className="text-2xl font-bold text-blue-800">
+          Login as Admin First
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

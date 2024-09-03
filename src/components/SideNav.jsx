@@ -16,12 +16,12 @@ function SideNav() {
   console.log(currloc);
 
   return (
-    <div className="bg-[#0046C0] flex flex-col h-[115vh] w-[270px]">
+    <div className="bg-[#0046C0] flex flex-col h-[100vh] w-auto ">
       {/* Logo Section */}
       <div className="flex gap-2 p-6 items-center">
         <div className="bg-white p-4 rounded-full">
           <img
-            src="https://www.freeiconspng.com/thumbs/doctor-logo/doctor-symbol-universal-png-2.png"
+            src="https://rukminim2.flixcart.com/image/850/1000/xif0q/wall-decoration/j/s/d/doctor-logo-1-doctor-1-6x5in-doctor-logo-decalbazaar-original-imagpnchqbfc3jf2.jpeg?q=90&crop=false"
             alt="DocSlot Logo"
             className="w-[50px] h-[50px]"
           />
