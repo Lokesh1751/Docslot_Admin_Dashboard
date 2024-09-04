@@ -63,8 +63,8 @@ function AllAppointments() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
-      <div className="h-screen overflow-y-scroll">
+    <div className="p-6 max-w-4xl  mx-auto  rounded-lg">
+      <div className="grid grid-cols-3 gap-4 overflow-y-scroll">
         {appointments.length === 0 ? (
           <p className="text-center text-lg font-semibold text-gray-500">
             No appointments found.

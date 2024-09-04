@@ -26,19 +26,13 @@ const categories = [
 const Categories = () => {
   const { loggedIn } = useContext(AdminContext);
 
-if (!loggedIn) {
+  if (!loggedIn) {
+    window.location.pathname = "/";
+    return null;
+  }
   return (
-    <div className="flex items-center justify-center h-screen ">
-      <h1 className="text-2xl font-bold text-blue-800">
-        Login as Admin First
-      </h1>
-    </div>
-  );
-}
-  return (
-    <div className="p-6  rounded-lg ">
-      <h2 className="text-2xl font-bold mb-4 text-center">Doctor Categories</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="p-6  rounded-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-5">
         {categories.map((category) => (
           <Link to={`/cat/${category.name}`}>
             <div

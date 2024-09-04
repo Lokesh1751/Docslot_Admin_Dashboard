@@ -229,7 +229,7 @@ function Dashboard() {
 
   return (
     <div className="p-4 space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 items-center justify-center h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 items-center h-full">
         <div className="bg-white shadow-lg rounded-lg p-2">
           <h2 className="text-lg font-semibold mb-4">Doctors by Category</h2>
           <Doughnut data={categoryData} />
